@@ -37,6 +37,7 @@
 .idea/modules.xml
 .idea/*.iml
 .idea/modules
+target/
 *.iml
 *.ipr
 
