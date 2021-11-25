@@ -16,6 +16,9 @@ public class Stop
 
     public void updateReachableAt(Time time, Optional<LineName> line)
     {
+        if(reachableAt.isPresent() && reachableAt.get().getTime() <= time.getTime()) return;
+
+
         reachableAt = Optional.of(time);
         reachableVia = line;
     }

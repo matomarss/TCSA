@@ -59,11 +59,15 @@ public class Line
         if(timeAtFrom != null)
         {
             Time nextTime = timeAtFrom;
-
+            boolean canTravelThroughSegment = true;
             for (int i = segmentAfterFrom; i < lineSegments.size(); i++)
             {
                 Triplet<Time, StopName, Boolean> nextStop = lineSegments.get(i).nextStopAndUpdateReachable(nextTime); // TODO: co s boolom?
                 nextTime = nextStop.getValue0();
+
+                canTravelThroughSegment = nextStop.getValue2();
+
+                if(!canTravelThroughSegment) break;
             }
         }
     }

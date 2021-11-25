@@ -5,14 +5,14 @@ import java.util.Vector;
 public class Lines {
     private Map<LineName,Line> lines; // pridat lazy loading
 
-    public void updateReachable(Vector<LineName> lines, StopName stopName, Time time)
+    public void updateReachable(Vector<LineName> onLines, StopName stopName, Time time)
     {
-        for (LineName lineName: lines)
+        for (LineName lineName: onLines)
         {
             Line line = null;
-            if(this.lines.containsKey(lineName))
+            if(lines.containsKey(lineName))
             {
-                line = this.lines.get(lineName);
+                line = lines.get(lineName);
             }
 
             // lazy loading

@@ -38,7 +38,7 @@ public class Stops {
         return null;
     }
 
-    public Pair<Time,LineName> getReachableStop(StopName stop)
+    public Pair<Time,LineName> getReachableAt(StopName stop)
     {
         return null;
     }
