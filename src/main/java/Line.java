@@ -5,14 +5,20 @@ import org.javatuples.Triplet;
 import java.util.List;
 import java.util.Vector;
 
-@DatabaseTable(tableName = "lines")
-public class Line
+public class Line implements LineInterface
 {
     private LineName name;
     private Vector<Time> startingTimes;
     private StopName firstStop;
     private List<LineSegment> lineSegments;
 
+    public Line(LineName name, StopName firstStop, List<LineSegment> lineSegments, Vector<Time> startingTimes)
+    {
+        this.name = name;
+        this.firstStop = firstStop;
+        this.lineSegments = lineSegments;
+        this.startingTimes = startingTimes;
+    }
     public void updateReachable(Time time, StopName stopName)
     {
         Time timeAtFrom = null;

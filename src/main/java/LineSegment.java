@@ -4,11 +4,11 @@ import org.javatuples.Triplet;
 import java.util.Map;
 import java.util.Optional;
 
-public class LineSegment
+public class LineSegment implements LineSegmentInterface
 {
     private TimeDiff timeToNextStop;
     private Map<Time, Integer> numberOfPassengers;
-    private int  capacity; // je to dobre?
+    private int  capacity;
     private LineName lineName;
     private Stop nextStop;
 

@@ -3,15 +3,16 @@ import org.javatuples.Pair;
 import java.util.Optional;
 import java.util.Vector;
 
-public class Stop
+public class Stop implements StopInterface
 {
     private StopName name;
     private Time reachableAt = null;
     private Optional<LineName> reachableVia = Optional.empty();
     private Vector<LineName> lines; // ako sa tu dostanú lines?
 
-    public Stop(StopName name) {
+    public Stop(StopName name, Vector<LineName> lines) {
         this.name = name;
+        this.lines = new Vector<>(lines);
     }
 
     public void updateReachableAt(Time time, Optional<LineName> line)

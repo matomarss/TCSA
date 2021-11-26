@@ -5,8 +5,13 @@ import java.util.Optional;
 import java.util.Vector;
 
 public class ConnectionSearch {
-    private Stops stops;
-    private Lines lines;
+    private final StopsInterface stops;
+    private final LinesInterface lines;
+
+    public ConnectionSearch(StopsInterface stops, LinesInterface lines) {
+        this.stops = stops;
+        this.lines = lines;
+    }
 
     public ConnectionData search(StopName from, StopName to, Time time)
     {

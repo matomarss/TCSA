@@ -5,23 +5,33 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Vector;
 
-public class Stops {
-    private Map<StopName, Stop> stops;
+public class Stops implements StopsInterface{
+    private Map<StopName, StopInterface> stops;
 
-    public Optional<Pair<StopName, Time>> earliestReachableStopAfterTime(Time time)
+    private StopsFactoryInterface stopsFactory;
+
+
+    public Stops(StopsFactoryInterface stopsFactory)
     {
-        Stop earliestAfter = null;
-        Time earliestTimeAfter = new Time(Integer.MAX_VALUE);
+        this.stopsFactory = stopsFactory;
+    }
 
-        for (Map.Entry<StopName,Stop> e : stops.entrySet())
+    @Override
+    public Optional<Pair<StopName, Time>> earliestReachableStopAfterTime(Time boundaryTime)
+    {
+        StopInterface earliestAfter = null;
+        Time earliestAfterTime = new Time(Integer.MAX_VALUE);
+
+        for (Map.Entry<StopName,StopInterface> e : stops.entrySet())
         {
-            Time stopTime = e.getValue().getReachableAt().getValue0();
-            if(stopTime.getTime() > time.getTime()) // nema byt aj rovny?
+            StopInterface stop = e.getValue();
+            Time stopArrivalTime = stop.getReachableAt().getValue0();
+            if(stopArrivalTime.getTime() > boundaryTime.getTime()) // nema byt aj rovny? NIE
             {
-                if(stopTime.getTime() < earliestTimeAfter.getTime())
+                if(stopArrivalTime.getTime() < earliestAfterTime.getTime())
                 {
-                    earliestTimeAfter = stopTime;
-                    earliestAfter = e.getValue();
+                    earliestAfterTime = stopArrivalTime;
+                    earliestAfter = stop;
                 }
             }
         }
@@ -29,39 +39,58 @@ public class Stops {
         if(earliestAfter == null) return Optional.empty();
         else
         {
-            return Optional.of(new Pair<>(earliestAfter.getName(), earliestTimeAfter));
+            return Optional.of(new Pair<>(earliestAfter.getName(), earliestAfterTime));
         }
     }
 
+    @Override
     public boolean setStartingStop(StopName stopName, Time time)
     {
-        Stop startingStop;
-
-        if(stops.containsKey(stopName)) startingStop = stops.get(stopName);
-        else
-        {
-            // asi nie to, co tu ma byt - skor lazy loading?
-            startingStop = new Stop(stopName);
-            stops.put(stopName,startingStop);
-        }
+        StopInterface startingStop = getStopByName(stopName);
 
         startingStop.updateReachableAt(time, Optional.empty());
-        return  true;
+
+        return true;
     }
 
+    @Override
     public Vector<LineName> getLines(StopName stopName)
     {
-        if(stops.containsKey(stopName)) return stops.get(stopName).getLines();
-        else
-        {
-            // tu by mal byt nejaky lazyLoading
-        }
-        return null;
+        StopInterface stop = getStopByName(stopName);
+
+        return stop.getLines();
     }
 
+    @Override
     public Pair<Time,Optional<LineName>> getReachableAt(StopName stop)
     {
+        // tu asi nie je treba lazy loading
         return stops.get(stop).getReachableAt();
+    }
+
+    @Override
+    public void clean() {
+
+    }
+
+
+
+    private StopInterface getStopByName(StopName stopName)
+    {
+        StopInterface stop;
+        if(stops.containsKey(stopName)) stop = stops.get(stopName);
+        else
+        {
+            stop = Load(stopName);
+        }
+
+        return stop;
+    }
+    private StopInterface Load(StopName stopName)
+    {
+        StopInterface stop = stopsFactory.getStopByName(stopName);
+        stops.put(stopName,stop);
+        return stop;
     }
 
 }
