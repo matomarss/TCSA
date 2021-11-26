@@ -35,9 +35,9 @@ public class ConnectionSearch {
         StopName prev = to;
         while(!prev.equals(from))
         {
-            Pair<Time,LineName> at = stops.getReachableAt(prev);
-            route.addToRoute(prev, at.getValue0(),Optional.of(at.getValue1()));
-            prev = lines.updateCapacityAndGetPreviousStop(at.getValue1(), prev, at.getValue0());
+            Pair<Time,Optional<LineName>> at = stops.getReachableAt(prev);
+            route.addToRoute(prev, at.getValue0(),at.getValue1());
+            if(at.getValue1().isPresent()) prev = lines.updateCapacityAndGetPreviousStop(at.getValue1().get(), prev, at.getValue0());
         }
         route.addToRoute(prev, time, Optional.empty());
 

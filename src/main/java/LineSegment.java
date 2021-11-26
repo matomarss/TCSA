@@ -30,6 +30,8 @@ public class LineSegment
 
     public void incrementNumberOfPassengers(Time startTime)
     {
+        if(numberOfPassengers.get(startTime) >= capacity) throw new RuntimeException();
 
+        numberOfPassengers.put(startTime, numberOfPassengers.get(startTime) + 1);
     }
 }

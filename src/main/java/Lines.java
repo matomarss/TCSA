@@ -20,8 +20,13 @@ public class Lines {
             line.updateReachable(time,stopName);
         }
     }
-    public StopName updateCapacityAndGetPreviousStop(LineName line, StopName stop, Time time)
+    public StopName updateCapacityAndGetPreviousStop(LineName lineName, StopName stopName, Time time)
     {
+        if(lines.containsKey(lineName))
+        {
+            Line line = lines.get(lineName);
+            return line.updateCapacityAndGetPreviousStop(stopName,time);
+        }
         return null;
     }
 

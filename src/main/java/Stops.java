@@ -7,19 +7,40 @@ import java.util.Vector;
 
 public class Stops {
     private Map<StopName, Stop> stops;
-    private Stop startingStop;
 
     public Optional<Pair<StopName, Time>> earliestReachableStopAfterTime(Time time)
     {
-        return Optional.empty();
+        Stop earliestAfter = null;
+        Time earliestTimeAfter = new Time(Integer.MAX_VALUE);
+
+        for (Map.Entry<StopName,Stop> e : stops.entrySet())
+        {
+            Time stopTime = e.getValue().getReachableAt().getValue0();
+            if(stopTime.getTime() > time.getTime()) // nema byt aj rovny?
+            {
+                if(stopTime.getTime() < earliestTimeAfter.getTime())
+                {
+                    earliestTimeAfter = stopTime;
+                    earliestAfter = e.getValue();
+                }
+            }
+        }
+
+        if(earliestAfter == null) return Optional.empty();
+        else
+        {
+            return Optional.of(new Pair<>(earliestAfter.getName(), earliestTimeAfter));
+        }
     }
 
     public boolean setStartingStop(StopName stopName, Time time)
     {
+        Stop startingStop;
+
         if(stops.containsKey(stopName)) startingStop = stops.get(stopName);
         else
         {
-            // asi nie to, co tu ma byt
+            // asi nie to, co tu ma byt - skor lazy loading?
             startingStop = new Stop(stopName);
             stops.put(stopName,startingStop);
         }
@@ -38,9 +59,9 @@ public class Stops {
         return null;
     }
 
-    public Pair<Time,LineName> getReachableAt(StopName stop)
+    public Pair<Time,Optional<LineName>> getReachableAt(StopName stop)
     {
-        return null;
+        return stops.get(stop).getReachableAt();
     }
 
 }

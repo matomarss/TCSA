@@ -62,7 +62,7 @@ public class Line
             boolean canTravelThroughSegment = true;
             for (int i = segmentAfterFrom; i < lineSegments.size(); i++)
             {
-                Triplet<Time, StopName, Boolean> nextStop = lineSegments.get(i).nextStopAndUpdateReachable(nextTime); // TODO: co s boolom?
+                Triplet<Time, StopName, Boolean> nextStop = lineSegments.get(i).nextStopAndUpdateReachable(nextTime);
                 nextTime = nextStop.getValue0();
 
                 canTravelThroughSegment = nextStop.getValue2();
@@ -71,8 +71,27 @@ public class Line
             }
         }
     }
-    public void updateCapacityAndGetPreviousStop(StopName stop, Time time)
+    public StopName updateCapacityAndGetPreviousStop(StopName stop, Time time)
     {
+        if(firstStop.equals(stop)) return null;
 
+        for (Time startTime: startingTimes)
+        {
+            StopName previousStop = firstStop;
+            Time previousTime = time;
+            for (int i=0; i < lineSegments.size(); i++)
+            {
+                Pair<Time, StopName> nextStop = lineSegments.get(i).nextStop(previousTime);
+                if(nextStop.getValue0().equals(time) && nextStop.getValue1().equals(stop))
+                {
+                    lineSegments.get(i).incrementNumberOfPassengers(time);
+                    return previousStop;
+                }
+                previousStop = nextStop.getValue1();
+                previousTime = nextStop.getValue0();
+            }
+        }
+
+        return null;
     }
 }

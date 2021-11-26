@@ -6,8 +6,8 @@ import java.util.Vector;
 public class Stop
 {
     private StopName name;
-    private Optional<Time> reachableAt;
-    private Optional<LineName> reachableVia;
+    private Time reachableAt = null;
+    private Optional<LineName> reachableVia = Optional.empty();
     private Vector<LineName> lines; // ako sa tu dostanú lines?
 
     public Stop(StopName name) {
@@ -16,16 +16,16 @@ public class Stop
 
     public void updateReachableAt(Time time, Optional<LineName> line)
     {
-        if(reachableAt.isPresent() && reachableAt.get().getTime() <= time.getTime()) return;
+        if(reachableAt != null && reachableAt.getTime() <= time.getTime()) return;
 
 
-        reachableAt = Optional.of(time);
+        reachableAt = time;
         reachableVia = line;
     }
 
-    public Pair<Time, LineName> getReachableAt()
+    public Pair<Time, Optional<LineName>> getReachableAt()
     {
-        return null;
+        return new Pair<>(reachableAt, reachableVia);
     }
 
     public Vector<LineName> getLines()
