@@ -28,7 +28,7 @@ public class LineSegment implements LineSegmentInterface
     public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime)
     {
         boolean hasSeatAvailable = false;
-        if(numberOfPassengers.get(startTime) < capacity)
+        if(numberOfPassengers.get(new Time(startTime.getTime()+ timeToNextStop.getTime())) < capacity)
         {
             nextStop.updateReachableAt(new Time(startTime.getTime()+timeToNextStop.getTime()), Optional.of(lineName));
             hasSeatAvailable = true;
@@ -41,5 +41,10 @@ public class LineSegment implements LineSegmentInterface
         if(numberOfPassengers.get(startTime) >= capacity) throw new RuntimeException();
 
         numberOfPassengers.put(startTime, numberOfPassengers.get(startTime) + 1);
+    }
+
+    public Integer getPassengers(Time time)
+    {
+        return numberOfPassengers.get(time);
     }
 }

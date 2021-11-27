@@ -64,7 +64,7 @@ public class InMemoryConnections
 
 
         ConnectionSearch cs = new ConnectionSearch(stops, lines);
-        ConnectionData cd = cs.search(new StopName("A"),new StopName("B"),new Time(1));
+        ConnectionData cd = cs.search(new StopName("B12"),new StopName("C12"),new Time(1));
         System.out.println(cd);
     }
 }

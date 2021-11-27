@@ -28,4 +28,10 @@ public class LineName
     public int hashCode() {
         return Objects.hash(lineName);
     }
+
+    @Override
+    public String
+    toString() {
+        return lineName;
+    }
 }

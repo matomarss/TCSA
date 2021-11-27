@@ -36,7 +36,7 @@ public class Line implements LineInterface
             }
 
             //if(timeAtFrom != null) lineSegments.get(0).nextStopAndUpdateReachable(timeAtFrom);
-            segmentAfterFrom = 1;
+            segmentAfterFrom = 0;
         }
         else
         {
@@ -45,6 +45,7 @@ public class Line implements LineInterface
                 Time nextTime = startingTime;
                 for (int i=0; i < lineSegments.size(); i++)
                 {
+                    notify(i);
                     Pair<Time, StopName> nextStop = lineSegments.get(i).nextStop(nextTime);
 
                     if(nextStop.getValue1().equals(stopName))
@@ -69,6 +70,7 @@ public class Line implements LineInterface
             boolean canTravelThroughSegment = true;
             for (int i = segmentAfterFrom; i < lineSegments.size(); i++)
             {
+                notify(i);
                 Triplet<Time, StopName, Boolean> nextStop = lineSegments.get(i).nextStopAndUpdateReachable(nextTime);
                 nextTime = nextStop.getValue0();
 
@@ -85,9 +87,10 @@ public class Line implements LineInterface
         for (Time startTime: startingTimes)
         {
             StopName previousStop = firstStop;
-            Time previousTime = time;
+            Time previousTime = startTime;
             for (int i=0; i < lineSegments.size(); i++)
             {
+                notify(i);
                 Pair<Time, StopName> nextStop = lineSegments.get(i).nextStop(previousTime);
                 if(nextStop.getValue0().equals(time) && nextStop.getValue1().equals(stop))
                 {
@@ -102,6 +105,10 @@ public class Line implements LineInterface
         return null;
     }
 
+    public LineName getName()
+    {
+        return name;
+    }
     @Override
     public void register(LinesInterface lines) {
         this.lines = lines;
@@ -109,6 +116,6 @@ public class Line implements LineInterface
 
     public void notify(int i)
     {
-        lines.updateSegments(name, i);
+        if(lines != null) lines.updateSegments(name, i);
     }
 }

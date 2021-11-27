@@ -28,4 +28,9 @@ public class StopName
     public int hashCode() {
         return Objects.hash(stopName);
     }
+
+    @Override
+    public String toString() {
+        return stopName;
+    }
 }
