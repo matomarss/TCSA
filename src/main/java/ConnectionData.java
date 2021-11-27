@@ -13,4 +13,16 @@ public class ConnectionData
     {
         route.add(new Triplet<>(stopName,time,lineName));
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = route.size()-1; i>=0; i--)
+        {
+            stringBuilder.append(route.get(i));
+            stringBuilder.append(" ");
+        }
+
+        return  stringBuilder.toString();
+    }
 }

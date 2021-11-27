@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -7,6 +8,7 @@ public class Lines implements LinesInterface {
     private LinesFactoryInterface linesFactory;
 
     public Lines(LinesFactoryInterface linesFactory) {
+        lines = new HashMap<>();
         this.linesFactory = linesFactory;
     }
 
@@ -28,9 +30,14 @@ public class Lines implements LinesInterface {
     @Override
     public void clean()
     {
-
+        lines = new HashMap<>();
     }
 
+    @Override
+    public void updateSegments(LineName lineName, int index)
+    {
+        linesFactory.createSegment(lineName, index);
+    }
 
 
     private LineInterface getLineByName(LineName lineName)
@@ -43,6 +50,7 @@ public class Lines implements LinesInterface {
         }
         else {
             line = Load(lineName);
+            line.register(this);
         }
         return line;
     }

@@ -1,9 +1,6 @@
 import org.javatuples.Pair;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Vector;
+import java.util.*;
 
 public class Stops implements StopsInterface{
     private Map<StopName, StopInterface> stops;
@@ -14,6 +11,7 @@ public class Stops implements StopsInterface{
     public Stops(StopsFactoryInterface stopsFactory)
     {
         this.stopsFactory = stopsFactory;
+        stops = new HashMap<>(); //moze byt s hashom problem?
     }
 
     @Override
@@ -69,8 +67,13 @@ public class Stops implements StopsInterface{
     }
 
     @Override
-    public void clean() {
+    public StopInterface getStop(StopName stopName) {
+        return getStopByName(stopName);
+    }
 
+    @Override
+    public void clean() {
+        stops = new HashMap<>();
     }
 
 

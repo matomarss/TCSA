@@ -11,6 +11,7 @@ public class Line implements LineInterface
     private Vector<Time> startingTimes;
     private StopName firstStop;
     private List<LineSegment> lineSegments;
+    private LinesInterface lines;
 
     public Line(LineName name, StopName firstStop, List<LineSegment> lineSegments, Vector<Time> startingTimes)
     {
@@ -99,5 +100,15 @@ public class Line implements LineInterface
         }
 
         return null;
+    }
+
+    @Override
+    public void register(LinesInterface lines) {
+        this.lines = lines;
+    }
+
+    public void notify(int i)
+    {
+        lines.updateSegments(name, i);
     }
 }

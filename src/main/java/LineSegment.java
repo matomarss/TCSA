@@ -10,7 +10,15 @@ public class LineSegment implements LineSegmentInterface
     private Map<Time, Integer> numberOfPassengers;
     private int  capacity;
     private LineName lineName;
-    private Stop nextStop;
+    private StopInterface nextStop;
+
+    public LineSegment(TimeDiff timeToNextStop, Map<Time, Integer> numberOfPassengers, int capacity, LineName lineName, StopInterface nextStop) {
+        this.timeToNextStop = timeToNextStop;
+        this.numberOfPassengers = numberOfPassengers;
+        this.capacity = capacity;
+        this.lineName = lineName;
+        this.nextStop = nextStop;
+    }
 
     public Pair<Time, StopName> nextStop(Time startTime)
     {

@@ -14,5 +14,7 @@ public interface StopsInterface
 
     Pair<Time,Optional<LineName>> getReachableAt(StopName stop);
 
+    StopInterface getStop(StopName stopName);
+
     void clean();
 }
