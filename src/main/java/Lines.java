@@ -31,10 +31,11 @@ public class Lines implements LinesInterface {
     public void clean()
     {
         lines = new HashMap<>();
+        linesFactory.clearBuffer();
     }
 
     @Override
-    public void updateSegments(LineName lineName, int index)
+    public void updateSegment(LineName lineName, int index)
     {
         linesFactory.createSegment(lineName, index);
     }

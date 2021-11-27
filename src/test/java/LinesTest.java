@@ -1,4 +1,3 @@
-import com.j256.ormlite.stmt.query.In;
 import org.junit.Test;
 
 import java.util.*;
@@ -6,8 +5,36 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+class MockedLinesFactory implements LinesFactoryInterface
+{
+    List<Line> lines;
 
-public class LineTest
+    public MockedLinesFactory(List<Line> lines) {
+        this.lines = lines;
+    }
+
+    @Override
+    public LineInterface getLineByName(LineName lineName)
+    {
+        for (Line line:lines
+        ) {
+            if(line.getName().equals(lineName)) return line;
+        }
+        return null;
+    }
+
+    @Override
+    public void createSegment(LineName lineName, int index)
+    {
+
+    }
+
+    @Override
+    public void clearBuffer() {
+    }
+}
+
+public class LinesTest
 {
     private Line line1;
     private Line line2;
@@ -17,10 +44,11 @@ public class LineTest
     private Stop stopD;
     private Line line3;
 
+    private Lines lines;
+
     private LineSegment lineSegment1;
     private LineSegment lineSegment2;
     private LineSegment lineSegment3;
-
 
     public void setUp()
     {
@@ -98,62 +126,17 @@ public class LineTest
         Vector<Time> startingTimes3 = new Vector<>();
         startingTimes3.add(new Time(1));
         line3 = new Line(new LineName("3"),new StopName("A"), lineSegmentList3, startingTimes3);
+
+        lines = new Lines(new MockedLinesFactory(Arrays.asList(line1,line2)));
     }
 
     @Test
-    public void simpleLineUpdateReachableTest()
+    public void updateReachableTest()
     {
-        setUp();
-
-        assertNull(stopB.getReachableAt().getValue0());
-        assertEquals(Optional.empty(), stopB.getReachableAt().getValue1());
-        assertNull(stopC.getReachableAt().getValue0());
-        assertEquals(Optional.empty(),stopC.getReachableAt().getValue1());
-
-        line1.updateReachable(new Time(1), new StopName("A"));
-        assertEquals(8, stopB.getReachableAt().getValue0().getTime());
-        assertEquals(line1.getName(), stopB.getReachableAt().getValue1().get());
-        assertEquals(16, stopC.getReachableAt().getValue0().getTime());
-        assertEquals(line1.getName(),stopC.getReachableAt().getValue1().get());
+        Vector<LineName> upLines = new Vector<>(Arrays.asList(new LineName("1"),new LineName(("2"))));
 
         setUp();
-
-        assertNull(stopB.getReachableAt().getValue0());
-        assertEquals(Optional.empty(), stopB.getReachableAt().getValue1());
-        assertNull(stopC.getReachableAt().getValue0());
-        assertEquals(Optional.empty(),stopC.getReachableAt().getValue1());
-
-        line1.updateReachable(new Time(1), new StopName("B"));
-
-        assertNull(stopB.getReachableAt().getValue0());
-        assertEquals(Optional.empty(), stopB.getReachableAt().getValue1());
-        assertEquals(16, stopC.getReachableAt().getValue0().getTime());
-        assertEquals(line1.getName(),stopC.getReachableAt().getValue1().get());
-
-        setUp();
-
-        assertNull(stopB.getReachableAt().getValue0());
-        assertEquals(Optional.empty(), stopB.getReachableAt().getValue1());
-        assertNull(stopC.getReachableAt().getValue0());
-        assertEquals(Optional.empty(),stopC.getReachableAt().getValue1());
-
-        line1.updateReachable(new Time(1), new StopName("C"));
-
-        assertNull(stopB.getReachableAt().getValue0());
-        assertEquals(Optional.empty(), stopB.getReachableAt().getValue1());
-        assertNull(stopC.getReachableAt().getValue0());
-        assertEquals(Optional.empty(), stopC.getReachableAt().getValue1());
-        assertEquals(17, stopD.getReachableAt().getValue0().getTime());
-        assertEquals(line1.getName(),stopD.getReachableAt().getValue1().get());
-    }
-
-    @Test
-    public void moreLinesUpdateReachableTest()
-    {
-        setUp();
-
-        line1.updateReachable(new Time(1), new StopName("A"));
-        line2.updateReachable(new Time(1), new StopName("A"));
+        lines.updateReachable(upLines, new StopName("A"),new Time(1));
 
         assertNull(stopA.getReachableAt().getValue0());
         assertEquals(Optional.empty(), stopA.getReachableAt().getValue1());
@@ -165,61 +148,31 @@ public class LineTest
 
         assertEquals(11, stopC.getReachableAt().getValue0().getTime());
         assertEquals(line2.getName(), stopC.getReachableAt().getValue1().get());
-
-        setUp();
-
-        line2.updateReachable(new Time(1), new StopName("A"));
-        line1.updateReachable(new Time(1), new StopName("A"));
-
-        assertNull(stopA.getReachableAt().getValue0());
-        assertEquals(Optional.empty(), stopA.getReachableAt().getValue1());
-
-        assertEquals(8, stopB.getReachableAt().getValue0().getTime());
-        assertEquals(line1.getName(), stopB.getReachableAt().getValue1().get());
-        assertEquals(17, stopD.getReachableAt().getValue0().getTime());
-        assertEquals(line1.getName(),stopD.getReachableAt().getValue1().get());
-
-        assertEquals(11, stopC.getReachableAt().getValue0().getTime());
-        assertEquals(line2.getName(), stopC.getReachableAt().getValue1().get());
-    }
-
-    @Test
-    public void testBlockedLineUpdateReachable()
-    {
-        setUp();
-        line3.updateReachable(new Time(1), new StopName("A"));
-
-        assertEquals(5, stopB.getReachableAt().getValue0().getTime());
-        assertEquals(line3.getName(), stopB.getReachableAt().getValue1().get());
-
-        assertNull(stopC.getReachableAt().getValue0());
-        assertEquals(Optional.empty(), stopC.getReachableAt().getValue1());
-        assertNull(stopD.getReachableAt().getValue0());
-        assertEquals(Optional.empty(), stopD.getReachableAt().getValue1());
-
-        setUp();
-        line3.updateReachable(new Time(1), new StopName("C"));
-        assertEquals(11, stopD.getReachableAt().getValue0().getTime());
-        assertEquals(line3.getName(), stopD.getReachableAt().getValue1().get());
     }
 
     @Test
     public void testUpdateCapacity()
     {
         setUp();
-        StopName prev = line1.updateCapacityAndGetPreviousStop(new StopName("D"), new Time(17));
+        StopName prev = lines.updateCapacityAndGetPreviousStop(new LineName("1"), new StopName("D"), new Time(17));
 
         assertEquals(Integer.valueOf(9), lineSegment3.getPassengers(new Time(17)));
         assertEquals(new StopName("C"), prev);
 
-        prev=line1.updateCapacityAndGetPreviousStop(prev, new Time(16));
+        prev=lines.updateCapacityAndGetPreviousStop(new LineName("1"),prev, new Time(16));
 
         assertEquals(Integer.valueOf(6), lineSegment2.getPassengers(new Time(16)));
         assertEquals(new StopName("B"), prev);
 
-        prev=line1.updateCapacityAndGetPreviousStop(prev, new Time(8));
+        prev=lines.updateCapacityAndGetPreviousStop(new LineName("1"),prev, new Time(8));
 
         assertEquals(Integer.valueOf(5), lineSegment1.getPassengers(new Time(8)));
         assertEquals(new StopName("A"), prev);
+    }
+
+    @Test
+    public void testGetLineByName()
+    {
+
     }
 }

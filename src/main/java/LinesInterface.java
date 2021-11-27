@@ -8,5 +8,5 @@ public interface LinesInterface
 
     void clean();
 
-    void updateSegments(LineName lineName, int i);
+    void updateSegment(LineName lineName, int i);
 }

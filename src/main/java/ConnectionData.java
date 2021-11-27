@@ -2,6 +2,7 @@ import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,13 @@ public class ConnectionData
     public void addToRoute(StopName stopName, Time time, Optional<LineName> lineName)
     {
         route.add(new Triplet<>(stopName,time,lineName));
+    }
+
+    public List<Triplet<StopName,Time, Optional<LineName>>> getRoute()
+    {
+        List<Triplet<StopName,Time, Optional<LineName>>> toReturn = new ArrayList<>(route);
+        Collections.reverse(toReturn);
+        return toReturn;
     }
 
     @Override

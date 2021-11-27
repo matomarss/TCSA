@@ -63,7 +63,7 @@ public class Stops implements StopsInterface{
     public Pair<Time,Optional<LineName>> getReachableAt(StopName stop)
     {
         // tu asi nie je treba lazy loading
-        return stops.get(stop).getReachableAt();
+        return getStopByName(stop).getReachableAt();
     }
 
     @Override

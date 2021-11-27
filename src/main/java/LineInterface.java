@@ -10,4 +10,6 @@ public interface LineInterface
     StopName updateCapacityAndGetPreviousStop(StopName stop, Time time);
 
     void register(LinesInterface lines);
+
+    LineName getName();
 }

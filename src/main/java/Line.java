@@ -1,4 +1,3 @@
-import com.j256.ormlite.table.DatabaseTable;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
@@ -104,7 +103,7 @@ public class Line implements LineInterface
 
         return null;
     }
-
+    @Override
     public LineName getName()
     {
         return name;
@@ -116,6 +115,6 @@ public class Line implements LineInterface
 
     public void notify(int i)
     {
-        if(lines != null) lines.updateSegments(name, i);
+        if(lines != null) lines.updateSegment(name, i);
     }
 }
