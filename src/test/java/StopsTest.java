@@ -55,20 +55,20 @@ public class StopsTest
         stops.getStop(new StopName("A")).updateReachableAt(new Time(2), Optional.of(new LineName("1")));
         stops.getStop(new StopName("B")).updateReachableAt(new Time(23), Optional.of(new LineName("5")));
 
-        assertEquals(new StopName("A"),stops.earliestReachableStopAfterTime(new Time(1)).get().getValue0());
+        assertEquals(Arrays.asList(new StopName("A")),stops.earliestReachableStopAfterTime(new Time(1)).get().getValue0());
         assertEquals(new Time(2),stops.earliestReachableStopAfterTime(new Time(1)).get().getValue1());
 
-        assertEquals(new StopName("B"),stops.earliestReachableStopAfterTime(new Time(2)).get().getValue0());
+        assertEquals(Arrays.asList(new StopName("B")),stops.earliestReachableStopAfterTime(new Time(2)).get().getValue0());
         assertEquals(new Time(23),stops.earliestReachableStopAfterTime(new Time(2)).get().getValue1());
 
-        assertEquals(new StopName("B"),stops.earliestReachableStopAfterTime(new Time(15)).get().getValue0());
+        assertEquals(Arrays.asList(new StopName("B")),stops.earliestReachableStopAfterTime(new Time(15)).get().getValue0());
         assertEquals(new Time(23),stops.earliestReachableStopAfterTime(new Time(15)).get().getValue1());
 
         assertEquals(Optional.empty(),stops.earliestReachableStopAfterTime(new Time(23)));
 
         assertEquals(Optional.empty(),stops.earliestReachableStopAfterTime(new Time(100)));
 
-        assertEquals(new StopName("A"),stops.earliestReachableStopAfterTime(new Time(1)).get().getValue0());
+        assertEquals(Arrays.asList(new StopName("A")),stops.earliestReachableStopAfterTime(new Time(1)).get().getValue0());
     }
 
     @Test
