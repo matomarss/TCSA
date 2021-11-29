@@ -6,7 +6,7 @@ import java.util.Vector;
 
 public interface StopsInterface
 {
-    Optional<Pair<StopName, Time>> earliestReachableStopAfterTime(Time time);
+    Optional<Pair<Vector<StopName>, Time>> earliestReachableStopAfterTime(Time time);
 
     boolean setStartingStop(StopName stopName, Time time);
 

@@ -8,7 +8,16 @@ import java.util.Optional;
 
 public class ConnectionData
 {
-    List<Triplet<StopName,Time, Optional<LineName>>> route = new ArrayList<>();
+    private final List<Triplet<StopName,Time, Optional<LineName>>> route = new ArrayList<>();
+    private boolean foundRoute = false;
+
+    public boolean foundRoute() {
+        return foundRoute;
+    }
+
+    public void setFoundRoute(boolean foundRoute) {
+        this.foundRoute = foundRoute;
+    }
 
     public void addToRoute(StopName stopName, Time time, Optional<LineName> lineName)
     {

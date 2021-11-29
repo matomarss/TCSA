@@ -15,9 +15,9 @@ public class Stops implements StopsInterface{
     }
 
     @Override
-    public Optional<Pair<StopName, Time>> earliestReachableStopAfterTime(Time boundaryTime)
+    public Optional<Pair<Vector<StopName>, Time>> earliestReachableStopAfterTime(Time boundaryTime)
     {
-        StopInterface earliestAfter = null;
+        Vector<StopName> earliestAfter = new Vector<>();
         Time earliestAfterTime = new Time(Integer.MAX_VALUE);
 
         for (Map.Entry<StopName,StopInterface> e : stops.entrySet())
@@ -28,16 +28,22 @@ public class Stops implements StopsInterface{
             {
                 if(stopArrivalTime.getTime() < earliestAfterTime.getTime())
                 {
+                    earliestAfter = new Vector<>();
+
                     earliestAfterTime = stopArrivalTime;
-                    earliestAfter = stop;
+                    earliestAfter.add(stop.getName());
+                }
+                else if(stopArrivalTime.getTime() == earliestAfterTime.getTime())
+                {
+                    earliestAfter.add(stop.getName());
                 }
             }
         }
 
-        if(earliestAfter == null) return Optional.empty();
+        if(earliestAfter.isEmpty()) return Optional.empty();
         else
         {
-            return Optional.of(new Pair<>(earliestAfter.getName(), earliestAfterTime));
+            return Optional.of(new Pair<>(earliestAfter, earliestAfterTime));
         }
     }
 

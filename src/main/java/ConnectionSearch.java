@@ -1,6 +1,5 @@
 import org.javatuples.Pair;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Vector;
 
@@ -15,7 +14,7 @@ public class ConnectionSearch {
 
     public ConnectionData search(StopName from, StopName to, Time time)
     {
-        ConnectionData route = new ConnectionData();
+        ConnectionData connectionData = new ConnectionData();
         stops.setStartingStop(from, time);
 
 
@@ -23,30 +22,43 @@ public class ConnectionSearch {
         lines.updateReachable(fromLines, from, time);
 
         Time nextEarliestStopTime = time;
-        Optional<Pair<StopName, Time>> earliestNext = stops.earliestReachableStopAfterTime(nextEarliestStopTime);
-        while(earliestNext.isPresent())
+        Optional<Pair<Vector<StopName>, Time>> earliestNext = stops.earliestReachableStopAfterTime(nextEarliestStopTime);
+        while(earliestNext.isPresent() && !connectionData.foundRoute())
         {
-            StopName nextEarliestStopName = earliestNext.get().getValue0();
+            Vector<StopName> nextEarliestStopNames = earliestNext.get().getValue0();
             nextEarliestStopTime = earliestNext.get().getValue1();
-            Vector<LineName> nextEarliestStopLines = stops.getLines(nextEarliestStopName);
 
-            if(nextEarliestStopName.equals(to)) break;
+            for (StopName nextEarliestStopName :nextEarliestStopNames)
+            {
+                if(nextEarliestStopName.equals(to))
+                {
+                    connectionData.setFoundRoute(true);
+                    break;
+                }
 
-            lines.updateReachable(nextEarliestStopLines, nextEarliestStopName, nextEarliestStopTime); // je mozne ze update reachable je zle?
+                Vector<LineName> nextEarliestStopLines = stops.getLines(nextEarliestStopName);
+
+                lines.updateReachable(nextEarliestStopLines, nextEarliestStopName, nextEarliestStopTime); // je mozne ze update reachable je zle?
+            }
 
             earliestNext = stops.earliestReachableStopAfterTime(nextEarliestStopTime);
         }
 
-        StopName prev = to;
-        while(!prev.equals(from))
+        if(connectionData.foundRoute())
         {
-            Pair<Time,Optional<LineName>> at = stops.getReachableAt(prev);
-            route.addToRoute(prev, at.getValue0(),at.getValue1());
-            if(at.getValue1().isPresent()) prev = lines.updateCapacityAndGetPreviousStop(at.getValue1().get(), prev, at.getValue0());
+            StopName prev = to;
+            while(!prev.equals(from))
+            {
+                Pair<Time,Optional<LineName>> at = stops.getReachableAt(prev);
+                connectionData.addToRoute(prev, at.getValue0(),at.getValue1());
+                if(!prev.equals(from)) prev = lines.updateCapacityAndGetPreviousStop(at.getValue1().get(), prev, at.getValue0());
+            }
+            connectionData.addToRoute(prev, time, Optional.empty());
         }
-        route.addToRoute(prev, time, Optional.empty());
 
         lines.clean();
-        return null;
+        stops.clean();
+
+        return connectionData;
     }
 }
