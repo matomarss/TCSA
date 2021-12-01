@@ -10,9 +10,11 @@ public class IntegrationTestWithDatabase
     private ConnectionSearch cs;
     private ConnectionSearch cs2;
     private ConnectionData cd;
+    DatabaseManipulator db;
+    DatabaseManipulator db2;
     public void setUp()
     {
-        DatabaseManipulator db = new DatabaseManipulator("TCSA.db");
+        db = new DatabaseManipulator("TCSA.db");
         db.executeSQLFile("TCSA.sql");
 
         Stops stops = new Stops(new DatabaseStopsFactory(db));
@@ -21,7 +23,7 @@ public class IntegrationTestWithDatabase
         cs = new ConnectionSearch(stops, lines);
 
 
-        DatabaseManipulator db2 = new DatabaseManipulator("TCSA2.db");
+        db2 = new DatabaseManipulator("TCSA2.db");
         db2.executeSQLFile("TCSA.sql");
         db2.executeSQLFile("TCSA2.sql");
 
@@ -35,6 +37,9 @@ public class IntegrationTestWithDatabase
     public void test1()
     {
         setUp();
+
+        assertEquals(Integer.valueOf(9), db.getPassengersToSegment("2",2).get(new Time(7)));
+        assertEquals(Integer.valueOf(9), db.getPassengersToSegment("2",1).get(new Time(5)));
 
         cd = cs.search(new StopName("B12"), new StopName("C12"), new Time(1));
         assertTrue(cd.foundRoute());
@@ -51,6 +56,23 @@ public class IntegrationTestWithDatabase
         assertEquals(new Time(1),cd.getRoute().get(0).getValue1());
         assertEquals(Optional.empty(),cd.getRoute().get(0).getValue2());
 
+        assertEquals(Integer.valueOf(10), db.getPassengersToSegment("2",2).get(new Time(7)));
+        assertEquals(Integer.valueOf(10), db.getPassengersToSegment("2",1).get(new Time(5)));
+
+        cd = cs.search(new StopName("B12"), new StopName("C12"), new Time(1));
+        assertTrue(cd.foundRoute());
+
+        assertEquals(new StopName("C12"),cd.getRoute().get(2).getValue0());
+        assertEquals(new Time(9),cd.getRoute().get(2).getValue1());
+        assertEquals(new LineName("2"),cd.getRoute().get(2).getValue2().get());
+
+        assertEquals(new StopName("Q2"),cd.getRoute().get(1).getValue0());
+        assertEquals(new Time(7),cd.getRoute().get(1).getValue1());
+        assertEquals(new LineName("2"),cd.getRoute().get(1).getValue2().get());
+
+        assertEquals(new StopName("B12"),cd.getRoute().get(0).getValue0());
+        assertEquals(new Time(1),cd.getRoute().get(0).getValue1());
+        assertEquals(Optional.empty(),cd.getRoute().get(0).getValue2());
     }
 
     @Test

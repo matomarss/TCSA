@@ -37,11 +37,11 @@ public class LineSegment implements LineSegmentInterface
         return new Triplet<>(new Time(startTime.getTime()+timeToNextStop.getTime()), nextStop.getName(), hasSeatAvailable);
     }
 
-    public void incrementNumberOfPassengers(Time startTime)
+    public void incrementNumberOfPassengers(Time time)
     {
-        if(numberOfPassengers.get(startTime) >= capacity) throw new RuntimeException();
+        if(numberOfPassengers.get(time) >= capacity) throw new RuntimeException();
 
-        numberOfPassengers.put(startTime, numberOfPassengers.get(startTime) + 1);
+        numberOfPassengers.put(time, numberOfPassengers.get(time) + 1);
     }
 
     public Integer getPassengers(Time time)

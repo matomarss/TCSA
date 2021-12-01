@@ -21,64 +21,52 @@ public class Line implements LineInterface
     }
     public void updateReachable(Time time, StopName stopName)
     {
-        Time timeAtFrom = null;
-        int segmentAfterFrom = 0;
 
-        if(firstStop.equals(stopName))
+        for (Time startingTime : startingTimes)
         {
-            for (Time startingTime:startingTimes) {
+            if(stopName.equals(firstStop))
+            {
                 if(startingTime.getTime() >= time.getTime())
                 {
-                    timeAtFrom = startingTime;
-                    break;
+                    updateAfterFrom(startingTime, 0);
                 }
+                continue;
             }
 
-            //if(timeAtFrom != null) lineSegments.get(0).nextStopAndUpdateReachable(timeAtFrom);
-            segmentAfterFrom = 0;
-        }
-        else
-        {
-            for (Time startingTime : startingTimes)
-            {
-                Time nextTime = startingTime;
-                for (int i=0; i < lineSegments.size(); i++)
-                {
-                    notify(i);
-                    Pair<Time, StopName> nextStop = lineSegments.get(i).nextStop(nextTime);
-
-                    if(nextStop.getValue1().equals(stopName))
-                    {
-                        if(nextStop.getValue0().getTime() >= time.getTime())
-                        {
-                            timeAtFrom = nextStop.getValue0();
-                            segmentAfterFrom = i+1;
-                        }
-                        break; // predpokladame, že kazda line obsahuje kazdu zastavku len raz a teda sme na nej nenasli/nasli autobus, ktory ide cez hladanu stanicu v case, ktory sa da stihnut
-                    }
-                    nextTime = nextStop.getValue0();
-                }
-
-                if(timeAtFrom != null) break; //uz mame spravny autobus a najblizsi cas na zastavku
-            }
-        }
-
-        if(timeAtFrom != null)
-        {
-            Time nextTime = timeAtFrom;
-            boolean canTravelThroughSegment = true;
-            for (int i = segmentAfterFrom; i < lineSegments.size(); i++)
+            Time nextTime = startingTime;
+            for (int i=0; i < lineSegments.size(); i++)
             {
                 notify(i);
-                Triplet<Time, StopName, Boolean> nextStop = lineSegments.get(i).nextStopAndUpdateReachable(nextTime);
+                Pair<Time, StopName> nextStop = lineSegments.get(i).nextStop(nextTime);
+
+                if(nextStop.getValue1().equals(stopName))
+                {
+                    if(nextStop.getValue0().getTime() >= time.getTime())
+                    {
+                        updateAfterFrom(nextStop.getValue0(), i+1);
+                    }
+                    continue;
+                }
                 nextTime = nextStop.getValue0();
-
-                canTravelThroughSegment = nextStop.getValue2();
-
-                if(!canTravelThroughSegment) break;
             }
+            //if(timeAtFrom != null) break; //uz mame spravny autobus a najblizsi cas na zastavku
         }
     }
+
+    private void updateAfterFrom(Time timeAtFrom, int segmentAfterFrom) {
+        Time nextTime = timeAtFrom;
+        boolean canTravelThroughSegment;
+        for (int i = segmentAfterFrom; i < lineSegments.size(); i++) {
+            notify(i);
+            Triplet<Time, StopName, Boolean> nextStop = lineSegments.get(i).nextStopAndUpdateReachable(nextTime);
+            nextTime = nextStop.getValue0();
+
+            canTravelThroughSegment = nextStop.getValue2();
+
+            if (!canTravelThroughSegment) break;
+        }
+    }
+
     public StopName updateCapacityAndGetPreviousStop(StopName stop, Time time)
     {
         if(firstStop.equals(stop)) return null;
