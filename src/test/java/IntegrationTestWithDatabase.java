@@ -33,7 +33,7 @@ public class IntegrationTestWithDatabase
     }
 
     @Test
-    public void test1()
+    public void mainTest()
     {
         setUp();
 
