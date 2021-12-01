@@ -2,8 +2,7 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class IntegrationTestWithDatabase
 {
@@ -73,6 +72,46 @@ public class IntegrationTestWithDatabase
         assertEquals(new StopName("B12"),cd.getRoute().get(0).getValue0());
         assertEquals(new Time(1),cd.getRoute().get(0).getValue1());
         assertEquals(Optional.empty(),cd.getRoute().get(0).getValue2());
+
+
+        cd = cs.search(new StopName("B12"), new StopName("C12"), new Time(1));
+        assertTrue(cd.foundRoute());
+
+        assertEquals(new StopName("C12"),cd.getRoute().get(1).getValue0());
+        assertEquals(new Time(11),cd.getRoute().get(1).getValue1());
+        assertEquals(new LineName("1"),cd.getRoute().get(1).getValue2().get());
+
+        assertEquals(new StopName("B12"),cd.getRoute().get(0).getValue0());
+        assertEquals(new Time(1),cd.getRoute().get(0).getValue1());
+        assertEquals(Optional.empty(),cd.getRoute().get(0).getValue2());
+
+
+        cd = cs.search(new StopName("B12"), new StopName("C12"), new Time(1));
+        assertTrue(cd.foundRoute());
+
+        assertEquals(new StopName("C12"),cd.getRoute().get(1).getValue0());
+        assertEquals(new Time(11),cd.getRoute().get(1).getValue1());
+        assertEquals(new LineName("1"),cd.getRoute().get(1).getValue2().get());
+
+        assertEquals(new StopName("B12"),cd.getRoute().get(0).getValue0());
+        assertEquals(new Time(1),cd.getRoute().get(0).getValue1());
+        assertEquals(Optional.empty(),cd.getRoute().get(0).getValue2());
+
+
+        cd = cs.search(new StopName("B12"), new StopName("C12"), new Time(1));
+        assertTrue(cd.foundRoute());
+
+        assertEquals(new StopName("C12"),cd.getRoute().get(1).getValue0());
+        assertEquals(new Time(12),cd.getRoute().get(1).getValue1());
+        assertEquals(new LineName("1"),cd.getRoute().get(1).getValue2().get());
+
+        assertEquals(new StopName("B12"),cd.getRoute().get(0).getValue0());
+        assertEquals(new Time(1),cd.getRoute().get(0).getValue1());
+        assertEquals(Optional.empty(),cd.getRoute().get(0).getValue2());
+
+
+        cd = cs.search(new StopName("B12"), new StopName("C12"), new Time(1));
+        assertFalse(cd.foundRoute());
     }
 
     @Test

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Vector;
 
 public class Lines implements LinesInterface {
-    private Map<LineName,LineInterface> lines; // pridat lazy loading
+    private Map<LineName,LineInterface> lines;
     private final LinesFactoryInterface linesFactory;
 
     public Lines(LinesFactoryInterface linesFactory) {

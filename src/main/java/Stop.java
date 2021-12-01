@@ -8,7 +8,7 @@ public class Stop implements StopInterface
     private StopName name;
     private Time reachableAt = null;
     private Optional<LineName> reachableVia = Optional.empty();
-    private Vector<LineName> lines; // ako sa tu dostanú lines?
+    private Vector<LineName> lines;
 
     public Stop(StopName name, Vector<LineName> lines) {
         this.name = name;

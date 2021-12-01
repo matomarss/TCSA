@@ -7,10 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 public class DatabaseManipulator implements DatabaseManipulatorInterface
 {
@@ -114,6 +111,9 @@ public class DatabaseManipulator implements DatabaseManipulatorInterface
             {
                 toReturn.add(new Time(rs.getInt("start_time")));
             }
+
+            toReturn.sort(Comparator.comparingInt(Time::getTime));
+
         } catch (SQLException e) {
             System.err.println(e.getMessage() + " nothing loaded");
         } finally {
@@ -230,12 +230,11 @@ public class DatabaseManipulator implements DatabaseManipulatorInterface
         try {
             conn.setAutoCommit(false);
 
-            prstmt = conn.prepareStatement("UPDATE passengers " +
-                    "set passengers_num = ? " +
-                    "where orderID=? AND line_name = ? AND time = ?;");
+            prstmt = conn.prepareStatement("update passengers set passengers_num = ? where orderID=? AND line_name = ? AND time = ?;");
 
             for (Triplet<LineName, Integer, Map<Time, Integer>> segment : segments) {
                 for (Time t : segment.getValue2().keySet()) {
+
 
                     prstmt.setInt(1, segment.getValue2().get(t));
                     prstmt.setInt(2, segment.getValue1());
@@ -243,10 +242,12 @@ public class DatabaseManipulator implements DatabaseManipulatorInterface
                     prstmt.setInt(4, t.getTime());
 
                     prstmt.executeUpdate();
+
                 }
             }
 
             conn.commit();
+
         } catch ( Exception e ) {
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         }

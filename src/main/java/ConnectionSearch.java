@@ -38,7 +38,7 @@ public class ConnectionSearch {
 
                 Vector<LineName> nextEarliestStopLines = stops.getLines(nextEarliestStopName);
 
-                lines.updateReachable(nextEarliestStopLines, nextEarliestStopName, nextEarliestStopTime); // je mozne ze update reachable je zle?
+                lines.updateReachable(nextEarliestStopLines, nextEarliestStopName, nextEarliestStopTime);
             }
 
             earliestNext = stops.earliestReachableStopAfterTime(nextEarliestStopTime);

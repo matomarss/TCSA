@@ -1,6 +1,6 @@
 import java.util.Objects;
 
-public class Time
+public class Time implements Comparable<Time>
 {
     private int time;
 
@@ -32,5 +32,11 @@ public class Time
     @Override
     public String toString() {
         return Integer.toString(time);
+    }
+
+
+    @Override
+    public int compareTo(Time o) {
+        return time-o.getTime();
     }
 }

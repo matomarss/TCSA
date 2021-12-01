@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class LineSegment implements LineSegmentInterface
+public class LineSegment
 {
     private TimeDiff timeToNextStop;
     private Map<Time, Integer> numberOfPassengers;

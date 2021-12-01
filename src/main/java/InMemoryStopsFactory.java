@@ -1,8 +1,6 @@
 import org.javatuples.Pair;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 public class InMemoryStopsFactory implements StopsFactoryInterface

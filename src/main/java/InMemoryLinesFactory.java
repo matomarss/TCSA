@@ -1,5 +1,3 @@
-
-import org.javatuples.Pair;
 import org.javatuples.Quartet;
 import org.javatuples.Quintet;
 
@@ -53,6 +51,5 @@ public class InMemoryLinesFactory implements LinesFactoryInterface{
     @Override
     public void clean() {
         lineSegments = new HashMap<>();
-        // TODO: zistit ci aj stops
     }
 }

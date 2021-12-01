@@ -12,7 +12,7 @@ public class Stops implements StopsInterface{
     public Stops(StopsFactoryInterface stopsFactory)
     {
         this.stopsFactory = stopsFactory;
-        stops = new HashMap<>(); //moze byt s hashom problem?
+        stops = new HashMap<>();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class Stops implements StopsInterface{
         {
             StopInterface stop = e.getValue();
             Time stopArrivalTime = stop.getReachableAt().getValue0();
-            if(stopArrivalTime.getTime() > boundaryTime.getTime()) // nema byt aj rovny? NIE
+            if(stopArrivalTime.getTime() > boundaryTime.getTime())
             {
                 if(stopArrivalTime.getTime() < earliestAfterTime.getTime())
                 {

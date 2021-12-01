@@ -49,7 +49,6 @@ public class Line implements LineInterface
                 }
                 nextTime = nextStop.getValue0();
             }
-            //if(timeAtFrom != null) break; //uz mame spravny autobus a najblizsi cas na zastavku
         }
     }
 
