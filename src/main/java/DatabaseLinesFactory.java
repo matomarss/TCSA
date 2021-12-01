@@ -1,10 +1,7 @@
 import org.javatuples.Pair;
-import org.javatuples.Quartet;
-import org.javatuples.Quintet;
 import org.javatuples.Triplet;
 
 import java.util.*;
-import java.sql.*;
 
 public class DatabaseLinesFactory implements LinesFactoryInterface{
 
@@ -50,8 +47,20 @@ public class DatabaseLinesFactory implements LinesFactoryInterface{
     }
 
     @Override
-    public void clearBuffer() {
+    public void clean() {
+
+        Vector<Triplet<LineName, Integer, Map<Time, Integer>>> segments = new Vector<>();
+        for (LineName ln:lineSegments.keySet())
+        {
+            List<LineSegment> segmentsInLine = lineSegments.get(ln);
+            for(int i = 0; i< segmentsInLine.size(); i++)
+            {
+                if(segmentsInLine.get(i) == null) continue;
+                segments.add(new Triplet<>(ln,i,segmentsInLine.get(i).getPassengers()));
+            }
+        }
+
+        db.updateSegments(segments);
         lineSegments = new HashMap<>();
-        // TODO: zistit ci aj stops
     }
 }

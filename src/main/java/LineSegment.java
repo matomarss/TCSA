@@ -1,6 +1,7 @@
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -46,5 +47,10 @@ public class LineSegment implements LineSegmentInterface
     public Integer getPassengers(Time time)
     {
         return numberOfPassengers.get(time);
+    }
+
+    public Map<Time, Integer> getPassengers()
+    {
+        return new HashMap<>(numberOfPassengers);
     }
 }

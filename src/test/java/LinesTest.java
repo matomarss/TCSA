@@ -30,7 +30,7 @@ class MockedLinesFactory implements LinesFactoryInterface
     }
 
     @Override
-    public void clearBuffer() {
+    public void clean() {
     }
 }
 

@@ -9,5 +9,8 @@ public class Main
 
         Triplet<String, String, String> stringy = new Triplet<>("S","A","S");
         System.out.println(stringy);
+
+        DatabaseManipulator db = new DatabaseManipulator("TCSA.db");
+        db.executeSQLFile("TCSA.sql");
     }
 }

@@ -1,5 +1,6 @@
 import org.javatuples.Pair;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class Stops implements StopsInterface{
@@ -95,10 +96,15 @@ public class Stops implements StopsInterface{
 
         return stop;
     }
-    private StopInterface Load(StopName stopName)
-    {
-        StopInterface stop = stopsFactory.getStopByName(stopName);
-        stops.put(stopName,stop);
+    private StopInterface Load(StopName stopName) {
+        StopInterface stop = null;
+        try {
+            stop = stopsFactory.getStopByName(stopName);
+            stops.put(stopName, stop);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
         return stop;
     }
 

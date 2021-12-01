@@ -1,11 +1,11 @@
+import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 public class Lines implements LinesInterface {
     private Map<LineName,LineInterface> lines; // pridat lazy loading
-    private LinesFactoryInterface linesFactory;
+    private final LinesFactoryInterface linesFactory;
 
     public Lines(LinesFactoryInterface linesFactory) {
         lines = new HashMap<>();
@@ -31,7 +31,7 @@ public class Lines implements LinesInterface {
     public void clean()
     {
         lines = new HashMap<>();
-        linesFactory.clearBuffer();
+        linesFactory.clean();
     }
 
     @Override
@@ -55,10 +55,16 @@ public class Lines implements LinesInterface {
         }
         return line;
     }
-    private LineInterface Load(LineName lineName)
-    {
-        LineInterface line = linesFactory.getLineByName(lineName);
-        lines.put(lineName, line);
+    private LineInterface Load(LineName lineName) {
+        LineInterface line = null;
+        try
+        {
+            line = linesFactory.getLineByName(lineName);
+            lines.put(lineName, line);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
         return line;
     }
 }

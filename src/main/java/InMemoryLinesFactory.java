@@ -51,7 +51,7 @@ public class InMemoryLinesFactory implements LinesFactoryInterface{
     }
 
     @Override
-    public void clearBuffer() {
+    public void clean() {
         lineSegments = new HashMap<>();
         // TODO: zistit ci aj stops
     }

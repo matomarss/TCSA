@@ -18,4 +18,8 @@ public interface DatabaseManipulatorInterface
     Triplet<TimeDiff, Integer, StopName> getSegmentToLine(String lineName, int index);
 
     Map<Time, Integer> getPassengersToSegment(String lineName, int index);
+
+    void updateSegments(Vector<Triplet<LineName, Integer, Map<Time, Integer>>> segments);
+
+    void executeSQLFile(String filePath);
 }

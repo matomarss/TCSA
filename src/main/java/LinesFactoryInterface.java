@@ -6,7 +6,7 @@ public interface LinesFactoryInterface
 
     void createSegment(LineName lineName, int index);
 
-    void clearBuffer();
+    void clean();
 
 
 }

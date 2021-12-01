@@ -75,7 +75,7 @@ public class InMemoryIntegrationTest
     }
 
     @Test
-    public void integrationTest()
+    public void test1()
     {
         setUp();
 
@@ -123,7 +123,7 @@ public class InMemoryIntegrationTest
     }
 
     @Test
-    public void test3()
+    public void test3blockedSegment()
     {
         setUp();
 
