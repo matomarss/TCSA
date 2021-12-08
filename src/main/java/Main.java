@@ -7,10 +7,12 @@ public class Main
 
     public static void main(String[] args) {
 
-        Triplet<String, String, String> stringy = new Triplet<>("S","A","S");
-        System.out.println(stringy);
+        Tcsa tcsa = new TcsaInMemory();
 
-        DatabaseManipulator db = new DatabaseManipulator("TCSA.db");
-        db.executeSQLFile("TCSA.sql");
+        tcsa.findAndReserve(new StopName("B12"), new StopName("C12"), new Time(1));
+
+        tcsa = new TcsaInDatabase();
+
+        tcsa.findAndReserve(new StopName("B12"), new StopName("C12"), new Time(1));
     }
 }
