@@ -7,6 +7,4 @@ public interface LinesInterface
     StopName updateCapacityAndGetPreviousStop(LineName lineName, StopName stopName, Time time);
 
     void clean();
-
-    void updateSegment(LineName lineName, int i);
 }

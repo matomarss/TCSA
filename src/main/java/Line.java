@@ -9,10 +9,9 @@ public class Line implements LineInterface
     private LineName name;
     private Vector<Time> startingTimes;
     private StopName firstStop;
-    private List<LineSegment> lineSegments;
-    private LinesInterface lines;
+    private List<LineSegmentInterface> lineSegments;
 
-    public Line(LineName name, StopName firstStop, List<LineSegment> lineSegments, Vector<Time> startingTimes)
+    public Line(LineName name, StopName firstStop, List<LineSegmentInterface> lineSegments, Vector<Time> startingTimes)
     {
         this.name = name;
         this.firstStop = firstStop;
@@ -36,7 +35,6 @@ public class Line implements LineInterface
             Time nextTime = startingTime;
             for (int i=0; i < lineSegments.size(); i++)
             {
-                notify(i);
                 Pair<Time, StopName> nextStop = lineSegments.get(i).nextStop(nextTime);
 
                 if(nextStop.getValue1().equals(stopName))
@@ -56,7 +54,6 @@ public class Line implements LineInterface
         Time nextTime = timeAtFrom;
         boolean canTravelThroughSegment;
         for (int i = segmentAfterFrom; i < lineSegments.size(); i++) {
-            notify(i);
             Triplet<Time, StopName, Boolean> nextStop = lineSegments.get(i).nextStopAndUpdateReachable(nextTime);
             nextTime = nextStop.getValue0();
 
@@ -76,7 +73,6 @@ public class Line implements LineInterface
             Time previousTime = startTime;
             for (int i=0; i < lineSegments.size(); i++)
             {
-                notify(i);
                 Pair<Time, StopName> nextStop = lineSegments.get(i).nextStop(previousTime);
                 if(nextStop.getValue0().equals(time) && nextStop.getValue1().equals(stop))
                 {
@@ -94,14 +90,5 @@ public class Line implements LineInterface
     public LineName getName()
     {
         return name;
-    }
-    @Override
-    public void register(LinesInterface lines) {
-        this.lines = lines;
-    }
-
-    public void notify(int i)
-    {
-        if(lines != null) lines.updateSegment(name, i);
     }
 }

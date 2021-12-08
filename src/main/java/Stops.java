@@ -1,6 +1,5 @@
 import org.javatuples.Pair;
 
-import java.sql.SQLException;
 import java.util.*;
 
 public class Stops implements StopsInterface{
@@ -69,7 +68,6 @@ public class Stops implements StopsInterface{
     @Override
     public Pair<Time,Optional<LineName>> getReachableAt(StopName stop)
     {
-        // tu asi nie je treba lazy loading
         return getStopByName(stop).getReachableAt();
     }
 
@@ -97,13 +95,8 @@ public class Stops implements StopsInterface{
         return stop;
     }
     private StopInterface Load(StopName stopName) {
-        StopInterface stop = null;
-        try {
-            stop = stopsFactory.getStopByName(stopName);
-            stops.put(stopName, stop);
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+        StopInterface stop = stopsFactory.getStopByName(stopName);
+        stops.put(stopName, stop);
 
         return stop;
     }

@@ -1,10 +1,8 @@
-import java.sql.SQLException;
-
 public interface LinesFactoryInterface
 {
-    LineInterface getLineByName(LineName lineName) throws SQLException;
+    LineInterface getLineByName(LineName lineName);
 
-    void createSegment(LineName lineName, int index);
+    LineSegmentInterface createSegment(LineName lineName, int index);
 
     void clean();
 

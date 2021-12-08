@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class LineSegment
+public class LineSegment implements LineSegmentInterface
 {
     private TimeDiff timeToNextStop;
     private Map<Time, Integer> numberOfPassengers;
@@ -21,11 +21,13 @@ public class LineSegment
         this.nextStop = nextStop;
     }
 
+    @Override
     public Pair<Time, StopName> nextStop(Time startTime)
     {
         return new Pair<>(new Time(startTime.getTime()+timeToNextStop.getTime()), nextStop.getName());
     }
 
+    @Override
     public Triplet<Time, StopName, Boolean> nextStopAndUpdateReachable(Time startTime)
     {
         boolean hasSeatAvailable = false;
@@ -37,6 +39,7 @@ public class LineSegment
         return new Triplet<>(new Time(startTime.getTime()+timeToNextStop.getTime()), nextStop.getName(), hasSeatAvailable);
     }
 
+    @Override
     public void incrementNumberOfPassengers(Time time)
     {
         if(numberOfPassengers.get(time) >= capacity) throw new RuntimeException();
@@ -44,11 +47,13 @@ public class LineSegment
         numberOfPassengers.put(time, numberOfPassengers.get(time) + 1);
     }
 
+    @Override
     public Integer getPassengers(Time time)
     {
         return numberOfPassengers.get(time);
     }
 
+    @Override
     public Map<Time, Integer> getPassengers()
     {
         return new HashMap<>(numberOfPassengers);

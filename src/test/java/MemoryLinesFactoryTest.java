@@ -28,7 +28,6 @@ public class MemoryLinesFactoryTest
     private InMemoryLinesFactory factory;
     private List<Quartet<LineName, StopName, Vector<Time>, List<Quintet<TimeDiff, Map<Time, Integer>, Integer, LineName, StopName>>>> linesList;
     private List<Quintet<TimeDiff, Map<Time, Integer>, Integer, LineName, StopName>> lineSegments;
-    private Lines lines;
     private Stops stops;
 
     private void setUp()
@@ -45,7 +44,6 @@ public class MemoryLinesFactoryTest
         linesList.add(new Quartet<>(new LineName("2"), new StopName("A"), new Vector<>(Arrays.asList(new Time(3), new Time(4))), lineSegments));
         factory = new InMemoryLinesFactory(stops, linesList);
 
-        lines = new Lines(factory);
     }
 
     @Test
@@ -53,7 +51,6 @@ public class MemoryLinesFactoryTest
     {
         setUp();
         LineInterface line =factory.getLineByName(new LineName("2"));
-        line.register(lines);
 
         assertEquals(new LineName("2"), line.getName());
         line.updateReachable(new Time(1), new StopName("A"));
@@ -61,16 +58,15 @@ public class MemoryLinesFactoryTest
         assertEquals(new LineName("2"), stops.getStop(new StopName("B")).getReachableAt().getValue1().get());
     }
 
-    @Test
+    /*@Test
     public void testCreateSegment()
     {
         setUp();
         LineInterface line =factory.getLineByName(new LineName("2"));
-        factory.createSegment(new LineName("2"), 0);
 
         assertEquals(new LineName("2"), line.getName());
         line.updateReachable(new Time(1), new StopName("A"));
         assertEquals(new Time(5), stops.getStop(new StopName("B")).getReachableAt().getValue0());
         assertEquals(new LineName("2"), stops.getStop(new StopName("B")).getReachableAt().getValue1().get());
-    }
+    }*/
 }

@@ -41,7 +41,7 @@ public class LineTest
         stopC = new Stop(new StopName("C"), linesC);
 
 
-        List<LineSegment> lineSegmentList = new ArrayList<>();
+        List<LineSegmentInterface> lineSegmentList = new ArrayList<>();
 
 
         Map<Time, Integer> passengers = new HashMap<>();
@@ -60,7 +60,7 @@ public class LineTest
         startingTimes.add(new Time(3));
         line1 = new Line(new LineName("1"),new StopName("A"), lineSegmentList, startingTimes);
 
-        List<LineSegment> lineSegmentList2 = new ArrayList<>();
+        List<LineSegmentInterface> lineSegmentList2 = new ArrayList<>();
 
 
         Map<Time, Integer> passengersL2 = new HashMap<>();
@@ -80,7 +80,7 @@ public class LineTest
         line2 = new Line(new LineName("2"),new StopName("B"), lineSegmentList2, startingTimes2);
 
 
-        List<LineSegment> lineSegmentList3 = new ArrayList<>();
+        List<LineSegmentInterface> lineSegmentList3 = new ArrayList<>();
 
 
         Map<Time, Integer> passengersL3 = new HashMap<>();

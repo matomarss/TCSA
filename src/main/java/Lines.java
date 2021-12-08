@@ -1,4 +1,3 @@
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -34,13 +33,6 @@ public class Lines implements LinesInterface {
         linesFactory.clean();
     }
 
-    @Override
-    public void updateSegment(LineName lineName, int index)
-    {
-        linesFactory.createSegment(lineName, index);
-    }
-
-
     private LineInterface getLineByName(LineName lineName)
     {
         LineInterface line;
@@ -51,19 +43,12 @@ public class Lines implements LinesInterface {
         }
         else {
             line = Load(lineName);
-            line.register(this);
         }
         return line;
     }
     private LineInterface Load(LineName lineName) {
-        LineInterface line = null;
-        try
-        {
-            line = linesFactory.getLineByName(lineName);
-            lines.put(lineName, line);
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+        LineInterface line = linesFactory.getLineByName(lineName);
+        lines.put(lineName, line);
 
         return line;
     }
